@@ -11,6 +11,7 @@ DBname = "postgres"
 DBuser = "postgres"
 DBpwd = "hamad12345"
 TableName = 'CensusData'
+Table1 = 'UNLOGGED'
 Datafile = "acs2015_census_tract_data_part1.csv"  # name of the data file to be loaded
 CreateDB = False  # indicates whether the DB table should be (re)-created
 
@@ -159,6 +160,53 @@ def createTable(conn):
 
         print(f"Created {TableName}")
 
+def createunlTable(conn):
+
+    with conn.cursor() as cursor:
+        cursor.execute(f"""
+            DROP TABLE IF EXISTS {Table1};
+            CREATE TABLE {Table1} (
+                CensusTract         NUMERIC,
+                State               TEXT,
+                County              TEXT,
+                TotalPop            INTEGER,
+                Men                 INTEGER,
+                Women               INTEGER,
+                Hispanic            DECIMAL,
+                White               DECIMAL,
+                Black               DECIMAL,
+                Native              DECIMAL,
+                Asian               DECIMAL,
+                Pacific             DECIMAL,
+                Citizen             DECIMAL,
+                Income              DECIMAL,
+                IncomeErr           DECIMAL,
+                IncomePerCap        DECIMAL,
+                IncomePerCapErr     DECIMAL,
+                Poverty             DECIMAL,
+                ChildPoverty        DECIMAL,
+                Professional        DECIMAL,
+                Service             DECIMAL,
+                Office              DECIMAL,
+                Construction        DECIMAL,
+                Production          DECIMAL,
+                Drive               DECIMAL,
+                Carpool             DECIMAL,
+                Transit             DECIMAL,
+                Walk                DECIMAL,
+                OtherTransp         DECIMAL,
+                WorkAtHome          DECIMAL,
+                MeanCommute         DECIMAL,
+                Employed            INTEGER,
+                PrivateWork         DECIMAL,
+                PublicWork          DECIMAL,
+                SelfEmployed        DECIMAL,
+                FamilyWork          DECIMAL,
+                Unemployment        DECIMAL
+            );
+        """)
+
+        print(f"Created {Table1}")
 def load(conn, icmdlist):
 
     with conn.cursor() as cursor:
@@ -186,6 +234,7 @@ def main():
 
     if CreateDB:
         createTable(conn)
+        createunlTable(conn)
 
     load(conn, cmdlist)
 
